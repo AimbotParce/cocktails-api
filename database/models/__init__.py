@@ -1,6 +1,6 @@
 from .cocktails import Cocktail
 from .images import Image
-from .ingredient_types import IngredientType
+from .ingredient_attributes import IngredientAttribute
 from .ingredients import Ingredient
 
-__all__ = ["Cocktail", "IngredientType", "Ingredient", "Image"]
+__all__ = ["Cocktail", "IngredientAttribute", "Ingredient", "Image"]

@@ -1,9 +1,9 @@
-from ..models import Cocktail, Ingredient, IngredientType
+from ..models import Cocktail, Ingredient, IngredientAttribute
 from . import Manager
 
 
 class CocktailManager(Manager):
-    def get_cocktails(self):
+    def get_cocktails(self, limit: int = None, offset: int = 0, alcoholic: bool = False, ingredient: str = None):
         cocktails = self.session.query(Cocktail).order_by(Cocktail.name).all()
         return list(map(lambda cocktail: cocktail.to_dict(), cocktails))
 

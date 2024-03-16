@@ -7,10 +7,10 @@ from sqlalchemy import Column, DateTime, Integer, String, Text
 from ..databases import database
 
 
-class IngredientType(database.base):
-    "Ingredient type model"
+class IngredientAttribute(database.base):
+    "Ingredient attribute model, such as alcoholic, non-alcoholic, etc."
     __bind_key__ = database.bind_key
-    __tablename__ = "ingredient_types"
+    __tablename__ = "ingredient_attributes"
     DATABASE = database
 
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)

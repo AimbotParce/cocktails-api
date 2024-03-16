@@ -2,7 +2,7 @@ import io
 
 import psycopg2
 
-from ..models import Image, Ingredient, IngredientType
+from ..models import Image, Ingredient, IngredientAttribute
 from . import Manager
 
 

@@ -2,7 +2,7 @@ import secrets
 from datetime import datetime
 from typing import TypedDict
 
-from sqlalchemy import Column, DateTime, Integer, String, Text
+from sqlalchemy import ARRAY, Column, DateTime, Integer, String, Text
 
 from ..databases import database
 
@@ -18,11 +18,11 @@ class Ingredient(database.base):
     image_uuid = Column(String(255), nullable=True)
     description = Column(Text, nullable=True)
     name = Column(String(255), nullable=False, unique=True)
-    type_id = Column(Integer, nullable=False)
+    attribute_ids = Column(ARRAY(Integer), default=[], nullable=False)
 
-    def __init__(self, name: str, type_id: int, image_uuid: str = None, description: str = None):
+    def __init__(self, name: str, attribute_ids: int = [], image_uuid: str = None, description: str = None):
         self.name = name
-        self.type_id = type_id
+        self.attribute_ids = attribute_ids
         self.image_uuid = image_uuid
         self.description = description
 
