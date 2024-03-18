@@ -6,9 +6,9 @@ from .... import app
 from ....serializers import Err, Ok, make_response
 
 
-@app.put("/attachments/images")
+@app.post("/attachments/images")
 @make_response
-def put_image():
+def post_image():
     if not "file" in flask.request.files:
         return Err("Missing file")
     file = flask.request.files["file"]

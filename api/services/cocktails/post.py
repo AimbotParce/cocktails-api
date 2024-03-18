@@ -6,9 +6,9 @@ from ... import app
 from ...serializers import Err, Ok, make_response
 
 
-@app.put("/cocktails")
+@app.post("/cocktails")
 @make_response
-def put_cocktail():
+def post_cocktail():
     if not "name" in flask.request.json:
         return Err("Missing cocktail name")
     name = flask.request.json["name"]
