@@ -2,7 +2,7 @@ import secrets
 from datetime import datetime
 from typing import TypedDict
 
-from sqlalchemy import ARRAY, BINARY, Column, DateTime, Integer, String, Text
+from sqlalchemy import ARRAY, BLOB, Column, DateTime, Integer, String, Text
 
 from ..databases import database
 
@@ -17,7 +17,7 @@ class Image(database.base):
     creation_datetime = Column(DateTime, default=datetime.now)
     uuid = Column(String(255), nullable=False, unique=True, default=secrets.token_urlsafe)
     name = Column(String(255), nullable=False)
-    image = Column(BINARY, nullable=False)
+    image = Column(BLOB, nullable=False)
 
     def __init__(self, name: str, image: bytes):
         self.name = name
