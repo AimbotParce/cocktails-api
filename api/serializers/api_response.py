@@ -1,3 +1,4 @@
+from functools import wraps
 from typing import Any, Callable, ParamSpec, TypeVar
 
 import flask
@@ -49,6 +50,7 @@ class Err(Response):
 
 
 def make_response(foo: Callable[P, R]) -> Callable[P, R]:
+    @wraps(foo)
     def wrapper(*args: P.args, **kwargs: P.kwargs) -> R:
         response = foo(*args, **kwargs)
         return flask.make_response(response.json, response.status)
