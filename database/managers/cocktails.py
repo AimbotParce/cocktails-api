@@ -10,9 +10,13 @@ class CocktailManager(Manager):
             raise NotFound()
         return cocktail.to_dict()
 
-    def get_cocktails(self, limit: int = None, offset: int = 0, alcoholic: bool = False, ingredient: str = None):
-        cocktails = self.session.query(Cocktail).order_by(Cocktail.name).all()
-        return list(map(lambda cocktail: cocktail.to_dict(), cocktails))
+    def get_cocktails(self, limit: int = None, offset: int = 0):
+        cocktails = self.session.query(Cocktail).order_by(Cocktail.name)
+        if limit:
+            cocktails = cocktails.limit(limit)
+        cocktails = cocktails.offset(offset)
+
+        return list(map(lambda cocktail: cocktail.to_dict(), cocktails.all()))
 
     def add_cocktail(self, name: str, ingredients: list = [], image_uuid: str = None, instructions: str = None):
         cocktail = Cocktail(name=name, ingredients=ingredients, image_uuid=image_uuid, instructions=instructions)
