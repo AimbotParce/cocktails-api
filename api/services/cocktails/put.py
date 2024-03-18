@@ -17,7 +17,7 @@ def put_cocktail():
     instructions = flask.request.json.get("instructions", None)
 
     with CocktailManager() as manager:
-        uuid = manager.add_cocktail(
+        cocktail = manager.add_cocktail(
             name=name, ingredients=ingredients, image_uuid=image_uuid, instructions=instructions
         )
-    return Ok(uuid)
+    return Ok(cocktail)

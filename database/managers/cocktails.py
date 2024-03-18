@@ -18,4 +18,4 @@ class CocktailManager(Manager):
         cocktail = Cocktail(name=name, ingredients=ingredients, image_uuid=image_uuid, instructions=instructions)
         self.session.add(cocktail)
         self.session.commit()
-        return cocktail.uuid
+        return cocktail.to_dict()
