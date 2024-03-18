@@ -3,9 +3,14 @@ Remember to set the environment variables:
 - API_PORT
 - API_HOST
 - DATABASE_URL
+- USERS_DATABASE_URL
 """
 
 import os
+
+from dotenv import load_dotenv
+
+load_dotenv()
 
 from flask_cors import CORS
 
