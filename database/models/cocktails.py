@@ -31,7 +31,7 @@ class Cocktail(database.base):
         return {
             "id": self.id,
             "creation_datetime": self.creation_datetime,
-            "image": self.image_uuid,
+            "image_uuid": self.image_uuid,
             "instructions": self.instructions,
             "name": self.name,
             "uuid": self.uuid,
