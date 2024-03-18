@@ -3,6 +3,10 @@ from . import Manager
 
 
 class CocktailManager(Manager):
+    def get_cocktail(self, uuid: str):
+        cocktail = self.session.query(Cocktail).filter(Cocktail.uuid == uuid).first()
+        return cocktail.to_dict()
+
     def get_cocktails(self, limit: int = None, offset: int = 0, alcoholic: bool = False, ingredient: str = None):
         cocktails = self.session.query(Cocktail).order_by(Cocktail.name).all()
         return list(map(lambda cocktail: cocktail.to_dict(), cocktails))
