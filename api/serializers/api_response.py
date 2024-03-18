@@ -53,6 +53,7 @@ def make_response(foo: Callable[P, R]) -> Callable[P, R]:
     @wraps(foo)
     def wrapper(*args: P.args, **kwargs: P.kwargs) -> R:
         response = foo(*args, **kwargs)
+        print(response.json, response.status, response)
         return flask.make_response(response.json, response.status)
 
     return wrapper
