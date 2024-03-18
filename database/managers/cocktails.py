@@ -1,3 +1,4 @@
+from ..exceptions import *
 from ..models import Cocktail, Ingredient, IngredientAttribute
 from . import Manager
 
@@ -5,6 +6,8 @@ from . import Manager
 class CocktailManager(Manager):
     def get_cocktail(self, uuid: str):
         cocktail = self.session.query(Cocktail).filter(Cocktail.uuid == uuid).first()
+        if not cocktail:
+            raise NotFound()
         return cocktail.to_dict()
 
     def get_cocktails(self, limit: int = None, offset: int = 0, alcoholic: bool = False, ingredient: str = None):
