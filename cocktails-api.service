@@ -1,0 +1,15 @@
+[Unit]
+Description=Cocktails API Service
+After=network.target
+
+[Service]
+Type=simple
+ExecStartPre=git pull
+ExecStartPre=/var/www/cocktails-api/.venv/bin/pip install -r /var/www/cocktails-api/requirements.txt
+ExecStart=/var/www/cocktails-api/.venv/bin/python app.py
+WorkingDirectory=/var/www/cocktails-api
+Restart=always
+User=root
+
+[Install]
+WantedBy=multi-user.target
