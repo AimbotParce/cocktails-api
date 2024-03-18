@@ -15,7 +15,7 @@ class Response:
     ok: bool
     message: str
     data: Any
-    status: int = 200
+    _status: int = 200
 
     def __init__(self, data: Any = None, message: str = "", **dict_data: Any):
         if data and dict_data:
@@ -34,7 +34,7 @@ class Response:
             return {"ok": self.ok, "message": self.message}
 
     def status(self, status: int):
-        self.status = status
+        self._status = status
         return self
 
 
@@ -53,7 +53,6 @@ def make_response(foo: Callable[P, R]) -> Callable[P, R]:
     @wraps(foo)
     def wrapper(*args: P.args, **kwargs: P.kwargs) -> R:
         response = foo(*args, **kwargs)
-        print(response.json, response.status, response)
-        return flask.make_response(response.json, response.status)
+        return flask.make_response(response.json, response._status)
 
     return wrapper
