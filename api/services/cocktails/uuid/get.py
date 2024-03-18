@@ -6,7 +6,7 @@ from .... import app
 from ....serializers import BooleanField, Err, Ok, make_response
 
 
-@app.get("/cocktails/<str:uuid>")
+@app.get("/cocktails/<uuid>")
 @make_response
 def get_cocktail(uuid: str):
     with CocktailManager() as manager:
