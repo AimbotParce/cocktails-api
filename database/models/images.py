@@ -1,5 +1,6 @@
 import secrets
 from datetime import datetime
+from typing import TypedDict
 
 from sqlalchemy import Column, DateTime, Integer, String
 from sqlalchemy.dialects.postgresql import BYTEA
@@ -22,3 +23,18 @@ class Image(database.base):
     def __init__(self, name: str, image: bytes):
         self.name = name
         self.image = image
+
+    def to_dict(self) -> "ImageJSON":
+        return {
+            "id": self.id,
+            "creation_datetime": self.creation_datetime,
+            "uuid": self.uuid,
+            "name": self.name,
+        }
+
+
+class ImageJSON(TypedDict):
+    id: int
+    creation_datetime: datetime
+    uuid: str
+    name: str
