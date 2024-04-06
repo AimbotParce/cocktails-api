@@ -3,3 +3,4 @@ python-dotenv
 flask-cors
 sqlalchemy
 psycopg2-binary
+waitress
