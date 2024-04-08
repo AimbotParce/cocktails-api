@@ -1,5 +1,5 @@
 from ..exceptions import *
-from ..models import Cocktail, Ingredient, IngredientAttribute
+from ..models import Cocktail, CocktailToIngredient, Ingredient
 from . import Manager
 
 
@@ -18,13 +18,33 @@ class CocktailManager(Manager):
 
         return list(map(lambda cocktail: cocktail.to_json(), cocktails.all()))
 
-    def add_cocktail(self, name: str, ingredients: list = [], image_uuid: str = None, instructions: str = None):
+    def add_cocktail(
+        self, name: str, ingredient_ids: list[int] = [], image_uuid: str = None, instructions: str = None
+    ):
         if image_uuid is None:
             image_uuid = DEFAULT_COCKTAIL_IMAGE_UUID
-        cocktail = Cocktail(name=name, ingredients=ingredients, image_uuid=image_uuid, instructions=instructions)
+
+        for ingredient_id in ingredient_ids:
+            ingredient = self.session.query(Ingredient).filter(Ingredient.id == ingredient_id).first()
+            if not ingredient:
+                raise NotFound()
+
+        cocktail = Cocktail(name=name, image_uuid=image_uuid, instructions=instructions)
         self.session.add(cocktail)
         self.session.commit()
-        return cocktail.to_json()
+        cocktail_id = cocktail.id
+        self.session.close()
+        self.session = self.DATABASE.session()
+        cocktail2 = self.session.query(Cocktail).filter(Cocktail.id == cocktail_id).first()
+
+        for ingredient_id in ingredient_ids:
+            ingredient = self.session.query(Ingredient).filter(Ingredient.id == ingredient_id).first()
+            if not ingredient:
+                raise NotFound()
+            cocktail_to_ingredient = CocktailToIngredient(cocktail_id=cocktail_id, ingredient_id=ingredient_id)
+            self.session.add(cocktail_to_ingredient)
+
+        return cocktail2.to_json()
 
 
 from . import DEFAULT_COCKTAIL_IMAGE_UUID

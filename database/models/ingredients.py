@@ -21,7 +21,7 @@ class Ingredient(database.base):
     image = relationship("Image")
     description = Column(Text, default=str)
     name = Column(String(255), unique=True)
-    attributes = relationship("IngredientToAttribute", uselist=True)
+    attributes = relationship("IngredientAttribute", secondary="ingredients_to_attributes", uselist=True)
 
     def __init__(self, name: str, attribute_ids: int = [], image_uuid: str = None, description: str = None):
         self.name = name

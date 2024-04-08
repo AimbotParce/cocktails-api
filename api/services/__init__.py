@@ -4,6 +4,7 @@ from .cocktails.get import get_all_cocktails
 from .cocktails.post import post_cocktail
 from .cocktails.uuid.get import get_cocktail
 from .ingredients.get import get_all_ingredients
+from .ingredients.post import post_ingredient
 
 __all__ = [
     "get_all_cocktails",
@@ -12,4 +13,5 @@ __all__ = [
     "post_image",
     "get_image",
     "get_all_ingredients",
+    "post_ingredient",
 ]
