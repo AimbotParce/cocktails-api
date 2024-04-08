@@ -22,3 +22,11 @@ class AttachmentManager(Manager):
         if not image:
             raise NotFound()
         return io.BytesIO(image.image)
+
+    def get_images(self, limit: int = None, offset: int = 0):
+        images = self.session.query(Image).order_by(Image.name)
+        if limit:
+            images = images.limit(limit)
+        images = images.offset(offset)
+
+        return list(map(lambda image: image.to_json(), images.all()))
