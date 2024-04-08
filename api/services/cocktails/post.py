@@ -1,5 +1,4 @@
 import flask
-
 from database.managers import CocktailManager
 
 from ... import app

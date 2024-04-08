@@ -24,7 +24,7 @@ class Image(database.base):
         self.name = name
         self.image = image
 
-    def to_dict(self) -> "ImageJSON":
+    def to_json(self) -> "ImageJSON":
         return {
             "id": self.id,
             "creation_datetime": self.creation_datetime,

@@ -1,3 +1,5 @@
+import os
+
 from ..databases import database
 
 
@@ -22,6 +24,27 @@ class Manager:
 
 
 from .attachments import AttachmentManager
-from .cocktails import CocktailManager
+from .defaults import DefaultsManager
 
-__all__ = ["Manager", "CocktailManager", "AttachmentManager"]
+with DefaultsManager() as defs:
+    if not "DEFAULT_COCKTAIL_IMAGE_UUID" in defs:
+        with AttachmentManager() as manager:
+            DEFAULT_COCKTAIL_IMAGE_UUID = manager.add_image(
+                "default-cocktail", open("/app/database/defaults/cocktail.jpg", "rb")
+            )["uuid"]
+    else:
+        DEFAULT_COCKTAIL_IMAGE_UUID = defs.get("DEFAULT_COCKTAIL_IMAGE_UUID")
+
+with DefaultsManager() as defs:
+    if not "DEFAULT_INGREDIENT_IMAGE_UUID" in defs:
+        with AttachmentManager() as manager:
+            DEFAULT_INGREDIENT_IMAGE_UUID = manager.add_image(
+                "default-ingredient", open("/app/database/defaults/ingredient.jpg", "rb")
+            )["uuid"]
+    else:
+        DEFAULT_INGREDIENT_IMAGE_UUID = defs.get("DEFAULT_INGREDIENT_IMAGE_UUID")
+
+from .cocktails import CocktailManager
+from .ingredients import IngredientManager
+
+__all__ = ["Manager", "CocktailManager", "AttachmentManager", "IngredientManager"]

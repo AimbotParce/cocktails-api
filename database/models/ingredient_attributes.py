@@ -3,6 +3,7 @@ from datetime import datetime
 from typing import TypedDict
 
 from sqlalchemy import Column, DateTime, Integer, String, Text
+from sqlalchemy.orm import relationship
 
 from ..databases import database
 
@@ -22,7 +23,7 @@ class IngredientAttribute(database.base):
         self.name = name
         self.description = description
 
-    def to_dict(self) -> "IngredientTypeJSON":
+    def to_json(self) -> "IngredientAttributeJSON":
         return {
             "id": self.id,
             "creation_datetime": self.creation_datetime,
@@ -31,7 +32,7 @@ class IngredientAttribute(database.base):
         }
 
 
-class IngredientTypeJSON(TypedDict):
+class IngredientAttributeJSON(TypedDict):
     id: int
     creation_datetime: datetime
     name: str

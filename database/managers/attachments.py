@@ -11,10 +11,10 @@ from . import Manager
 class AttachmentManager(Manager):
     def add_image(self, name: str, image: io.BytesIO) -> ImageJSON:
         "Create an image and return its uuid"
-        image = Image(name=name, image=psycopg2.Binary(image.read()))
+        image = Image(name=name, image=image.read())
         self.session.add(image)
         self.session.commit()
-        return image.to_dict()
+        return image.to_json()
 
     def get_image(self, uuid: str) -> io.BytesIO:
         "Get an image by its uuid"
