@@ -43,7 +43,6 @@ with DefaultsManager() as defs:
             )["uuid"]
     else:
         DEFAULT_INGREDIENT_IMAGE_UUID = defs.get("DEFAULT_INGREDIENT_IMAGE_UUID")
-
 from .cocktails import CocktailManager
 from .ingredients import IngredientManager
 

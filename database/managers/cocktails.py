@@ -15,7 +15,6 @@ class CocktailManager(Manager):
         if limit:
             cocktails = cocktails.limit(limit)
         cocktails = cocktails.offset(offset)
-
         return list(map(lambda cocktail: cocktail.to_json(), cocktails.all()))
 
     def add_cocktail(
