@@ -17,7 +17,7 @@ class IngredientAttribute(database.base):
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)
     creation_datetime = Column(DateTime, default=datetime.now)
     name = Column(String(255), nullable=False, unique=True)
-    description = Column(Text, nullable=True)
+    description = Column(Text, nullable=False, default=str)
 
     def __init__(self, name: str, description: str = None):
         self.name = name
