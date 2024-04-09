@@ -46,36 +46,27 @@ class IngredientManager(Manager):
         attribute_ids = []
         for attribute in attributes:
             if isinstance(attribute, int):
-                attribute = (
-                    self.session.query(IngredientAttribute).filter(IngredientAttribute.id == attribute_id).first()
-                )
-                if not attribute:
-                    raise NotFound()
+                attribute = self.session.query(IngredientAttribute).filter(IngredientAttribute.id == attribute).first()
             elif isinstance(attribute, dict):
-                attribute = self.session.query(IngredientAttribute).filter(**attribute).all()
-                if not len(attribute) == 1:
-                    raise NotFound()
-                attribute = attribute[0]
+                attribute = (
+                    self.session.query(IngredientAttribute).filter(IngredientAttribute.id == attribute["id"]).first()
+                )
             else:
                 raise ValueError("Invalid attribute type")
+            if not attribute:
+                raise NotFound()
             attribute_ids.append(attribute.id)
 
         ingredient = Ingredient(name=name, image_uuid=image_uuid, description=description)
         self.session.add(ingredient)
-        self.session.commit()
-        ingredient_id = ingredient.id
-        self.session.close()
-        self.session = self.DATABASE.session()
-        ingredient2 = self.session.query(Ingredient).filter(Ingredient.id == ingredient_id).first()
 
         for attribute_id in attribute_ids:
             attribute = self.session.query(IngredientAttribute).filter(IngredientAttribute.id == attribute_id).first()
             if not attribute:
                 raise NotFound()
-            ingredient_to_attribute = IngredientToAttribute(ingredient_id=ingredient_id, attribute_id=attribute_id)
-            self.session.add(ingredient_to_attribute)
+            ingredient.attributes.append(attribute)
 
-        return ingredient2.to_json()
+        return ingredient.to_json()
 
     def add_ingredient_attribute(self, name: str, description: str = None):
         attribute = IngredientAttribute(name=name, description=description)

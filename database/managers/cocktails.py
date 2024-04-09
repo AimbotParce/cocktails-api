@@ -28,27 +28,28 @@ class CocktailManager(Manager):
         if image_uuid is None:
             image_uuid = DEFAULT_COCKTAIL_IMAGE_UUID
 
-        for ingredient_id in ingredients:
-            ingredient = self.session.query(Ingredient).filter(Ingredient.id == ingredient_id).first()
+        ingredient_ids = []
+        for ingredient in ingredients:
+            if isinstance(ingredient, int):
+                ingredient = self.session.query(Ingredient).filter(Ingredient.id == ingredient).first()
+            elif isinstance(ingredient, dict):
+                ingredient = self.session.query(Ingredient).filter(Ingredient.id == ingredient["id"]).first()
+            else:
+                raise ValueError("Invalid ingredient type")
             if not ingredient:
                 raise NotFound()
+            ingredient_ids.append(ingredient.id)
 
         cocktail = Cocktail(name=name, image_uuid=image_uuid, instructions=instructions)
         self.session.add(cocktail)
-        self.session.commit()
-        cocktail_id = cocktail.id
-        self.session.close()
-        self.session = self.DATABASE.session()
-        cocktail2 = self.session.query(Cocktail).filter(Cocktail.id == cocktail_id).first()
 
-        for ingredient_id in ingredients:
+        for ingredient_id in ingredient_ids:
             ingredient = self.session.query(Ingredient).filter(Ingredient.id == ingredient_id).first()
             if not ingredient:
                 raise NotFound()
-            cocktail_to_ingredient = CocktailToIngredient(cocktail_id=cocktail_id, ingredient_id=ingredient_id)
-            self.session.add(cocktail_to_ingredient)
+            cocktail.ingredients.append(ingredient)
 
-        return cocktail2.to_json()
+        return cocktail.to_json()
 
 
 from . import DEFAULT_COCKTAIL_IMAGE_UUID
