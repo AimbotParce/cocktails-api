@@ -7,6 +7,7 @@ from .cocktails.uuid.get import get_cocktail
 from .ingredient_attributes.get import get_all_ingredient_attributes
 from .ingredient_attributes.post import post_ingredient_attribute
 from .ingredients.get import get_all_ingredients
+from .ingredients.name.get import get_ingredient
 from .ingredients.post import post_ingredient
 
 __all__ = [
@@ -20,4 +21,5 @@ __all__ = [
     "post_ingredient_attribute",
     "get_all_ingredients",
     "post_ingredient",
+    "get_ingredient",
 ]
