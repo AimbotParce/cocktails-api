@@ -23,9 +23,8 @@ class Ingredient(database.base):
     name = Column(String(255), unique=True)
     attributes = relationship("IngredientAttribute", secondary="ingredients_to_attributes", uselist=True)
 
-    def __init__(self, name: str, attribute_ids: int = [], image_uuid: str = None, description: str = None):
+    def __init__(self, name: str, image_uuid: str = None, description: str = None):
         self.name = name
-        self.attribute_ids = attribute_ids
         self.image_uuid = image_uuid
         self.description = description
 

@@ -1,5 +1,6 @@
 from ..exceptions import *
 from ..models import Cocktail, CocktailToIngredient, Ingredient
+from ..models.ingredients import IngredientJSON
 from . import Manager
 
 
@@ -18,12 +19,16 @@ class CocktailManager(Manager):
         return list(map(lambda cocktail: cocktail.to_json(), cocktails.all()))
 
     def add_cocktail(
-        self, name: str, ingredient_ids: list[int] = [], image_uuid: str = None, instructions: str = None
+        self,
+        name: str,
+        ingredients: list[int] | list[IngredientJSON] = [],
+        image_uuid: str = None,
+        instructions: str = None,
     ):
         if image_uuid is None:
             image_uuid = DEFAULT_COCKTAIL_IMAGE_UUID
 
-        for ingredient_id in ingredient_ids:
+        for ingredient_id in ingredients:
             ingredient = self.session.query(Ingredient).filter(Ingredient.id == ingredient_id).first()
             if not ingredient:
                 raise NotFound()
@@ -36,7 +41,7 @@ class CocktailManager(Manager):
         self.session = self.DATABASE.session()
         cocktail2 = self.session.query(Cocktail).filter(Cocktail.id == cocktail_id).first()
 
-        for ingredient_id in ingredient_ids:
+        for ingredient_id in ingredients:
             ingredient = self.session.query(Ingredient).filter(Ingredient.id == ingredient_id).first()
             if not ingredient:
                 raise NotFound()
