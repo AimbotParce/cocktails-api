@@ -12,11 +12,9 @@ def post_cocktail():
         return Err("Missing cocktail name")
     name = flask.request.json["name"]
     ingredients = flask.request.json.get("ingredients", [])
-    image_uuid = flask.request.json.get("image_uuid", None)
+    image = flask.request.json.get("image", None)
     instructions = flask.request.json.get("instructions", None)
 
     with CocktailManager() as manager:
-        cocktail = manager.add_cocktail(
-            name=name, ingredients=ingredients, image_uuid=image_uuid, instructions=instructions
-        )
+        cocktail = manager.add_cocktail(name=name, ingredients=ingredients, image=image, instructions=instructions)
     return Ok(cocktail)

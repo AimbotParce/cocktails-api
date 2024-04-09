@@ -1,5 +1,6 @@
 from ..exceptions import *
-from ..models import Cocktail, CocktailToIngredient, Ingredient
+from ..models import Cocktail, CocktailToIngredient, Image, Ingredient
+from ..models.images import ImageJSON
 from ..models.ingredients import IngredientJSON
 from . import Manager
 
@@ -22,11 +23,18 @@ class CocktailManager(Manager):
         self,
         name: str,
         ingredients: list[int] | list[IngredientJSON] = [],
-        image_uuid: str = None,
+        image: str | ImageJSON = None,
         instructions: str = None,
     ):
-        if image_uuid is None:
-            image_uuid = DEFAULT_COCKTAIL_IMAGE_UUID
+        if image is None:
+            image = self.session.query(Image).filter(Image.uuid == DEFAULT_COCKTAIL_IMAGE_UUID).first()
+        elif isinstance(image, dict):
+            image = self.session.query(Image).filter(Image.uuid == image["uuid"]).first()
+        elif isinstance(image, str):
+            image = self.session.query(Image).filter(Image.uuid == image).first()
+
+        if not image:
+            raise NotFound()
 
         ingredient_ids = []
         for ingredient in ingredients:
@@ -40,8 +48,10 @@ class CocktailManager(Manager):
                 raise NotFound()
             ingredient_ids.append(ingredient.id)
 
-        cocktail = Cocktail(name=name, image_uuid=image_uuid, instructions=instructions)
+        cocktail = Cocktail(name=name, instructions=instructions)
         self.session.add(cocktail)
+
+        cocktail.image = image
 
         for ingredient_id in ingredient_ids:
             ingredient = self.session.query(Ingredient).filter(Ingredient.id == ingredient_id).first()

@@ -12,11 +12,10 @@ def post_ingredient():
         return Err("Missing ingredient name")
     name = flask.request.json["name"]
     attributes = flask.request.json.get("attributes", [])
-    image_uuid = flask.request.json.get("image_uuid", None)
+    image = flask.request.json.get("image", None)
     description = flask.request.json.get("description", None)
 
     with IngredientManager() as manager:
-        ingredient = manager.add_ingredient(
-            name=name, attributes=attributes, image_uuid=image_uuid, description=description
-        )
+        print(image, flush=True)
+        ingredient = manager.add_ingredient(name=name, attributes=attributes, image=image, description=description)
     return Ok(ingredient)

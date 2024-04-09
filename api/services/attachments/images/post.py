@@ -1,5 +1,4 @@
 import flask
-
 from database.managers import AttachmentManager
 
 from .... import app
