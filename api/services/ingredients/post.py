@@ -9,7 +9,7 @@ from ...serializers import Err, Ok, make_response
 @make_response
 def post_ingredient():
     if not "name" in flask.request.json:
-        return Err("Missing cocktail name")
+        return Err("Missing ingredient name")
     name = flask.request.json["name"]
     attribute_ids = flask.request.json.get("attribute_ids", [])
     image_uuid = flask.request.json.get("image_uuid", None)

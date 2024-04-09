@@ -12,6 +12,14 @@ class IngredientManager(Manager):
 
         return list(map(lambda ingredient: ingredient.to_json(), ingredients.all()))
 
+    def get_attributes(self, limit: int = None, offset: int = 0):
+        attributes = self.session.query(IngredientAttribute).order_by(IngredientAttribute.name)
+        if limit:
+            attributes = attributes.limit(limit)
+        attributes = attributes.offset(offset)
+
+        return list(map(lambda attributes: attributes.to_json(), attributes.all()))
+
     def add_ingredient(
         self, name: str, attribute_ids: list[int] = [], image_uuid: str = None, description: str = None
     ):
@@ -27,6 +35,12 @@ class IngredientManager(Manager):
         self.session.add(ingredient)
         self.session.commit()
         return ingredient.to_json()
+
+    def add_ingredient_attribute(self, name: str, description: str = None):
+        attribute = IngredientAttribute(name=name, description=description)
+        self.session.add(attribute)
+        self.session.commit()
+        return attribute.to_json()
 
 
 from . import DEFAULT_INGREDIENT_IMAGE_UUID
