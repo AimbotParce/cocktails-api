@@ -12,6 +12,12 @@ class CocktailManager(Manager):
             raise NotFound()
         return cocktail.to_json()
 
+    def delete_cocktail(self, uuid: str):
+        cocktail = self.session.query(Cocktail).filter(Cocktail.uuid == uuid).first()
+        if not cocktail:
+            raise NotFound()
+        self.session.delete(cocktail)
+
     def get_cocktails(self, limit: int = None, offset: int = 0):
         cocktails = self.session.query(Cocktail).order_by(Cocktail.name)
         if limit:

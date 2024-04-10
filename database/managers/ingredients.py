@@ -12,6 +12,12 @@ class IngredientManager(Manager):
             raise NotFound()
         return ingredient.to_json()
 
+    def delete_ingredient(self, name: str):
+        ingredient = self.session.query(Ingredient).filter(Ingredient.name == name).first()
+        if not ingredient:
+            raise NotFound()
+        self.session.delete(ingredient)
+
     def get_ingredients(self, limit: int = None, offset: int = 0):
         ingredients = self.session.query(Ingredient).order_by(Ingredient.name)
         if limit:
@@ -25,6 +31,12 @@ class IngredientManager(Manager):
         if not attribute:
             raise NotFound()
         return attribute.to_json()
+
+    def delete_attribute(self, name: str):
+        attribute = self.session.query(IngredientAttribute).filter(IngredientAttribute.name == name).first()
+        if not attribute:
+            raise NotFound()
+        self.session.delete(attribute)
 
     def get_attributes(self, limit: int = None, offset: int = 0):
         attributes = self.session.query(IngredientAttribute).order_by(IngredientAttribute.name)

@@ -23,6 +23,13 @@ class AttachmentManager(Manager):
             raise NotFound()
         return io.BytesIO(image.image)
 
+    def delete_image(self, uuid: str):
+        "Delete an image by its uuid"
+        image = self.session.query(Image).filter_by(uuid=uuid).first()
+        if not image:
+            raise NotFound()
+        self.session.delete(image)
+
     def get_images(self, limit: int = None, offset: int = 0):
         images = self.session.query(Image).order_by(Image.name)
         if limit:
