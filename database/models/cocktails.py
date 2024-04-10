@@ -23,7 +23,13 @@ class Cocktail(database.base):
     image = relationship("Image")
     name = Column(String(255), nullable=False)
     uuid = Column(String(255), nullable=False, unique=True, default=secrets.token_urlsafe)
-    ingredients = relationship("Ingredient", secondary="cocktails_to_ingredients", uselist=True)
+    ingredients = relationship(
+        "Ingredient",
+        secondary="cocktails_to_ingredients",
+        uselist=True,
+        cascade="save-update, merge, refresh-expire, expunge",
+        backref="cocktails",
+    )
 
     def __init__(self, name: str, image_uuid: str = None, instructions: str = None):
         self.name = name
