@@ -6,7 +6,7 @@ from .... import app
 from ....serializers import BooleanField, Err, Ok, make_response
 
 
-@app.get("/ingredient_attributes/<name>")
+@app.delete("/ingredient_attributes/<name>")
 @make_response
 def delete_ingredient_attribute(name: str):
     with IngredientManager() as manager:
