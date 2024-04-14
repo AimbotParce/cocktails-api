@@ -12,6 +12,52 @@ class IngredientManager(Manager):
             raise NotFound()
         return ingredient.to_json()
 
+    def patch_ingredient(
+        self,
+        name: str,
+        new_name: str = None,
+        attributes: list[int] | list[IngredientAttributeJSON] = None,
+        image: str | ImageJSON = None,
+        description: str = None,
+    ):
+        ingredient = self.session.query(Ingredient).filter(Ingredient.name == name).first()
+        if not ingredient:
+            raise NotFound("Ingredient with that name not found.")
+        if image is not None:
+            if isinstance(image, dict):
+                image = self.session.query(Image).filter(Image.uuid == image["uuid"]).first()
+            elif isinstance(image, str):
+                image = self.session.query(Image).filter(Image.uuid == image).first()
+            if not image:
+                raise NotFound("Image not found.")
+            ingredient.image = image
+        if new_name:
+            ingredient.name = new_name
+        if description:
+            ingredient.description = description
+
+        if attributes is not None:
+            ingredient.attributes = []
+            for attribute in attributes:
+                attribute_instance = None
+                if isinstance(attribute, int):
+                    attribute_instance = (
+                        self.session.query(IngredientAttribute).filter(IngredientAttribute.id == attribute).first()
+                    )
+                elif isinstance(attribute, dict):
+                    attribute_instance = (
+                        self.session.query(IngredientAttribute)
+                        .filter(IngredientAttribute.id == attribute["id"])
+                        .first()
+                    )
+                else:
+                    raise ValueError("Invalid attribute type")
+                if attribute_instance is None:
+                    raise NotFound("Attribute not found")
+                ingredient.attributes.append(attribute_instance)
+
+        return ingredient.to_json()
+
     def delete_ingredient(self, name: str):
         ingredient = self.session.query(Ingredient).filter(Ingredient.name == name).first()
         if not ingredient:
@@ -93,6 +139,16 @@ class IngredientManager(Manager):
         attribute = IngredientAttribute(name=name, description=description)
         self.session.add(attribute)
         self.session.commit()
+        return attribute.to_json()
+
+    def patch_ingredient_attribute(self, name: str, new_name: str = None, description: str = None):
+        attribute = self.session.query(IngredientAttribute).filter(IngredientAttribute.name == name).first()
+        if not attribute:
+            raise NotFound("Attribute not found")
+        if new_name:
+            attribute.name = new_name
+        if description:
+            attribute.description = description
         return attribute.to_json()
 
 
