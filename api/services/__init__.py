@@ -6,6 +6,7 @@ from .cocktails.get import get_all_cocktails
 from .cocktails.post import post_cocktail
 from .cocktails.uuid.delete import delete_cocktail
 from .cocktails.uuid.get import get_cocktail
+from .cocktails.uuid.patch import patch_cocktail
 from .ingredient_attributes.get import get_all_ingredient_attributes
 from .ingredient_attributes.name.delete import delete_ingredient_attribute
 from .ingredient_attributes.name.get import get_ingredient_attribute
@@ -25,6 +26,7 @@ __all__ = [
     "delete_image",
     "post_cocktail",
     "post_image",
+    "patch_cocktail",
     "get_image",
     "get_all_ingredient_attributes",
     "get_ingredient_attribute",
