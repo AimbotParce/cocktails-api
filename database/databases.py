@@ -16,7 +16,6 @@ class Database:
 
 
 database = Database(os.environ.get("DATABASE_URL"), "default")
-# usersdb = Database(os.environ.get("USERS_DATABASE_URL"), "users")
 
 from .models import *
 
